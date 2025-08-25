@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Log</title>
+    <style>
+    </style>
+</head>
+
+<body onload="updateView()">
+<div id="app"></div>
+<script>
+    const model = {
+        user: {
+            name: '',
+            username: '',
+            password: '',
+        }
+    }
+    
+function updateView() {
+    document.getElementById('app').innerHTML = /*HTML*/`
+    ${name}
+    <form onSubmit="login()">
+    <div >
+        <label for="username">Username</label>
+        <input type="text" id="username" onchange="model.user.username = this.value" required>
+    </div>
+     <div >
+        <label for="password">Password</label>
+        <input type="password" id="password" onchange="model.user.password = this.value" required>
+    </div>
+    <button type="submit" id="submit">Submit</button>
+</form>
+    
+    `;
+}
+
+function login() {
+    checkLogin();
+    updateView();
+    return false;
+}
+
+async function checkLogin() {
+        const url = "/CheckLogin";
+        const response = await fetch(url);
+    
+}
+</script>
+
+</body>
+
+</html>
