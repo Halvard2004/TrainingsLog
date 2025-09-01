@@ -1,3 +1,5 @@
+using MySqlConnector;
+using TrainingLog;
 using TrainingLog.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,11 +16,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.MapGet("/CheckLogin", () =>
-{
-    DataStorage.ConnectToDatabase();
-    
-});
+
+
+app.MapPost("/isLoginValid", WatchDB.CheckLogin);
+
+app.MapPost("/LoginUser", DataStorage.Login);
+
+app.MapPost("/GetList", WatchDB.List);
 
 app.Run();
 
+public record LoginInput(string Username, string Password);
+public record LoginData(int Id, string Username);
+public record Task(int Id, string LogText, DateTime Date);
