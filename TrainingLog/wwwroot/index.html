@@ -20,15 +20,19 @@
         }
         
         },
-        loggedInUser: {
-            id: null,
-            username: ''
+        data: {
+            loggedInUser: {
+                id: null,
+                username: ''
+            },
+            UserLogs: []
         }
+        
     }
     
 function updateView() {
     document.getElementById('app').innerHTML = /*HTML*/`
-    ${model.loggedInUser.username}
+    ${model.data.loggedInUser.username}
     <form onSubmit="login()">
     <div >
         <label for="username">Username</label>
@@ -40,39 +44,53 @@ function updateView() {
     </div>
     <button type="submit" id="submit">Submit</button>
 </form>
-    
+    ${model.data.UserLogs.length !== 0 ? ShowLogList() : ''}
     `;
 }
-    function login() {
+
+
+
+
+
+    function ShowLogList() {
+        let html = "";
+        (model.data.UserLogs).foreach((log) => {
+            html  += `<div>${log.LogText}</div><div>${log.Date}</div>`
+        })
+        return html;
+    }
+    
+    async function login() {
         checkLogin().then(async test => {
             if (test) {
-                loginUser();
-                GetLogList();
+                await loginUser();
+                await GetLogList();
+                updateView();
+                return false;
             }
         });
-    updateView();
     return false;
 }
 
 async function checkLogin() {
         const url = "/isLoginValid";
-    const response = (await fetch(url, {
+    const response = await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(model.input.login)
-    }))
+    });
     return response.json();
 }
 
 async function loginUser() {
     const url = "/LoginUser";
-    const response = (await fetch(url, {
+    const response = await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(model.input.login)
-    }));
+    });
     let data = await response.json();
-    model.loggedInUser = {
+    model.data.loggedInUser = {
         id: data.id,
         username: data.username
     };
@@ -80,12 +98,18 @@ async function loginUser() {
 
 async function GetLogList() {
     const url = "/GetList";
-    const response = (await fetch(url, {
+    const response = await fetch(url, {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(model.loggedInUser.id)
-    }));
+        body: JSON.stringify(model.data.loggedInUser)
+    });
     let data = await response.json();
+    const logs = [];
+    for (let i = 0; i < data.length; i++) {
+        logs.push(data[i]);
+    }
+    model.data.UserLogs = logs;
+    
 }
 </script>
 

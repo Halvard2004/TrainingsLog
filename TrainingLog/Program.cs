@@ -16,16 +16,14 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-
+WatchDB WatchDB = new WatchDB();
+DataStorage DataStorages = new DataStorage();
 
 app.MapPost("/isLoginValid", WatchDB.CheckLogin);
 
-app.MapPost("/LoginUser", DataStorage.Login);
+app.MapPost("/LoginUser", DataStorages.Login);
 
 app.MapPost("/GetList", WatchDB.List);
 
 app.Run();
 
-public record LoginInput(string Username, string Password);
-public record LoginData(int Id, string Username);
-public record Task(int Id, string LogText, DateTime Date);

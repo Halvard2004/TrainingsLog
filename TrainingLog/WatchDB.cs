@@ -5,25 +5,26 @@ namespace TrainingLog;
 
 public class WatchDB
 {
-    public static bool CheckLogin(LoginInput text)
+    private readonly DataStorage _dataStorages = new DataStorage();
+    public bool CheckLogin(Objects.LoginInput text)
     {
-        MySqlConnection connection = DataStorage.ConnectToDatabase();
-        var check = DataStorage.IsUserAccountValid(connection, text);
-        DataStorage.EndConnection(connection);
+        MySqlConnection connection = _dataStorages.ConnectToDatabase();
+        var check = _dataStorages.IsUserAccountValid(connection, text);
+        _dataStorages.EndConnection(connection);
         return check;
     }
 
-    public static List<Task> List(int id)
+    public List<Objects.Task> List(Objects.GetTask user)
     {
-        List<Task> tasks = new List<Task>();
-        MySqlConnection connection = DataStorage.ConnectToDatabase();
-        var query = $"select * from userlog where UserConnection = 'id'";
-        bool check = DataStorage.HasLogData(connection, query);
+        List<Objects.Task> tasks = new List<Objects.Task>();
+        MySqlConnection connection = _dataStorages.ConnectToDatabase();
+        var query = $"select * from userlog where UserConnection = {user.Id}";
+        bool check = _dataStorages.HasLogData(connection, query);
         if (check)
         {
-            tasks = DataStorage.GetValidLogs(connection, query);
+            tasks = _dataStorages.GetValidLogs(connection, query);
         }
-        DataStorage.EndConnection(connection);
+        _dataStorages.EndConnection(connection);
         return tasks;
     }
 }

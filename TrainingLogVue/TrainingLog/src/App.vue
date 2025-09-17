@@ -1,0 +1,45 @@
+<script setup>
+import { RouterLink, RouterView } from 'vue-router'
+import Navi from './components/Nav.vue'
+</script>
+
+<template>
+  <div>
+  <header>
+
+    <div>
+      
+      <h1>Welcome to my Training app</h1>
+      <nav class="nav">
+        <Navi></Navi>
+      </nav>
+    </div>
+  </header>
+<div class="wrapper">
+  <RouterView />
+</div>
+</div>
+  
+</template>
+
+<style scoped>
+.app {
+  align-content: center;
+}
+.nav {
+  border-top-style: solid;
+  padding-top: 1vh;
+}
+
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  border-style: solid;
+  border-radius: 20px;
+  width: 40vw;
+  height: 60vh;
+  margin-top: 10px;
+  flex-wrap: wrap;;
+}
+</style>
