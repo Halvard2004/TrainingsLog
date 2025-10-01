@@ -1,14 +1,27 @@
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { store } from '@/components/Store';
+import { http } from '@/api/http';
 
 
-
-const Logs = ref([{date: '14.08.2025', id: 1, tagsId: [1, 3]}, 
-            {date: '15.08.2025', id: 2, tagsId: [2, 3]}, 
-            {date: '16.08.2025', id: 3, tagsId: [1]},
-            {date: '17.08.2025', id: 4, tagsId: [1, 3]}])
+const activeTag = ref(
+)
+const Logs = ref([])
 
 const tags = [{id: 1, name: "Climbing"}, {id: 2, name: "Running"}, {id: 3, name: "Calithenics"}]
+
+const showLog = ref('');
+
+
+onMounted(async () => {
+     let url = '/GetList/' + store.user.id;
+        const res = await http.get(url);
+        (res.data).forEach(element => {
+            var date = new Date(element.date)
+            Logs.value.push({id: element.id, text: element.logText, date: date.toLocaleDateString()})
+        });
+})
+
 </script>
 
 <template>

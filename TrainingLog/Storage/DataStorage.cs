@@ -20,7 +20,7 @@ public class DataStorage
 
     public bool IsUserAccountValid(MySqlConnection connection, Objects.LoginInput text)
     {
-        var query = $"select * from users where username = '{text.Username}' and  password = '{text.Password}'";
+        var query = $"select * from users where Username = '{text.Username}' and  Password = '{text.Password}'";
         var response = GetValidUser(connection, query);
         return response != null ? true : false;
 
@@ -33,7 +33,7 @@ public class DataStorage
         reader.Read();
         if (reader.HasRows)
         {
-            return new Objects.LoginData(reader.GetInt32("idUsers"), reader.GetString("username")); ;
+            return new Objects.LoginData(reader.GetInt32("Id"), reader.GetString("Username")); ;
         }
 
         return null;
@@ -42,7 +42,7 @@ public class DataStorage
     public Objects.LoginData Login(Objects.LoginInput text)
     {
         MySqlConnection connection = ConnectToDatabase();
-        var query = $"select * from users where username = '{text.Username}' and  password = '{text.Password}'";
+        var query = $"select * from users where Username = '{text.Username}' and  Password = '{text.Password}'";
         Objects.LoginData user = GetValidUser(connection, query);
         EndConnection(connection);
         return user;
@@ -61,7 +61,7 @@ public class DataStorage
         MySqlDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            var id = reader.GetInt32("idUserLog");
+            var id = reader.GetInt32("Id");
             var userLog = reader.GetString("LogText");
             var date = reader.GetDateTime("Date");
             tasks.Add(new Objects.Task (id, userLog, date));

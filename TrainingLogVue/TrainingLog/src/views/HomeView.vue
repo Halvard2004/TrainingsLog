@@ -1,19 +1,41 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import { onMounted, ref } from 'vue';
 
-const days = [{dag: 'Mandag', status: true, today: false}, 
-              {dag: 'Tirsdag', status: true, today: false}, 
-              {dag: 'Onsdag', status: true, today: false}, 
-              {dag: 'Torsdag', status: false, today: true}, 
-              {dag: 'Fredag', status: false, today: false}, 
-              {dag: 'Lørdag', status: false, today: false}, 
-              {dag: 'Søndag', status: false, today: false}]
+
+const days = ref([{dag: 'Mandag', status: true, today: false, date: ''}, 
+              {dag: 'Tirsdag', status: true, today: false, date: ''}, 
+              {dag: 'Onsdag', status: true, today: false, date: ''}, 
+              {dag: 'Torsdag', status: false, today: false, date: ''}, 
+              {dag: 'Fredag', status: false, today: false, date: ''}, 
+              {dag: 'Lørdag', status: false, today: false, date: ''}, 
+              {dag: 'Søndag', status: false, today: false, date: ''}]);
+
+
+onMounted(() => {
+
+  var today = new Date();
+  var day = today.getDay() || 7;
+  if (day !== 1) {
+    today.setHours(-24 * (day - 1));
+  }
+  days.value.forEach(element => {
+  element.date = today.toLocaleDateString();
+  if(today.toLocaleDateString() === new Date().toLocaleDateString()){
+    element.today = true;
+  } else {
+    element.today = false;
+  }
+  today.setHours(24);
+  });
+  console.log(days.value)
+})
+
 </script>
 
 <template>
-  <main>
+  <main v-on:load="">
    <div v-for="day in days">
-      <button :class="day.status ? 'Done' : 'NotDone'">{{ day.dag }} {{ day.today ? 'Today' : '' }}</button>
+      <button :class="day.status ? 'Done' : 'NotDone'">{{ day.dag }} {{ day.today ? 'Today' : '' }} {{ day.date == '' ? '' : day.date }}</button>
    </div>
   </main>
 </template>
@@ -26,8 +48,7 @@ main {
 button {
   background-color: cornflowerblue;
   border-radius: 10px;
-  max-height: 40px;
-  height: 4vh;
-  width: 12vw;
+  height: 6vh;
+  width: 16vw;
 }
 </style>

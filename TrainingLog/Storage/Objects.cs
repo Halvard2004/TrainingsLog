@@ -6,7 +6,6 @@ public static class Objects
     public record LoginData(int Id, string Username);
 
     public record Task(int Id, string LogText, DateTime Date);
- 
     
-    public record GetTask(int Id, string username);
+    public record GetTask(int Id);
 }

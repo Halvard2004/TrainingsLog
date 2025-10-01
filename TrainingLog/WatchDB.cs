@@ -3,7 +3,7 @@ using TrainingLog.Storage;
 
 namespace TrainingLog;
 
-public class WatchDB
+public class WatchDb
 {
     private readonly DataStorage _dataStorages = new DataStorage();
     public bool CheckLogin(Objects.LoginInput text)
@@ -14,11 +14,11 @@ public class WatchDB
         return check;
     }
 
-    public List<Objects.Task> List(Objects.GetTask user)
+    public List<Objects.Task> List(int id)
     {
         List<Objects.Task> tasks = new List<Objects.Task>();
         MySqlConnection connection = _dataStorages.ConnectToDatabase();
-        var query = $"select * from userlog where UserConnection = {user.Id}";
+        var query = $"select * from userlog where UserConnection = {id}";
         bool check = _dataStorages.HasLogData(connection, query);
         if (check)
         {

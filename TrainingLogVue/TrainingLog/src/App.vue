@@ -1,12 +1,13 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
 import Navi from './components/Nav.vue'
+import { store } from './components/Store';
 </script>
 
 <template>
   <div>
   <header>
-
+    {{ store.user.username }}
     <div>
       
       <h1>Welcome to my Training app</h1>
@@ -16,8 +17,10 @@ import Navi from './components/Nav.vue'
     </div>
   </header>
 <div class="wrapper">
-  <RouterView />
-</div>
+  <Suspense>
+    <RouterView />
+  </Suspense>
+  </div>
 </div>
   
 </template>
