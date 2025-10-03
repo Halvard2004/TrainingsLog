@@ -61,12 +61,30 @@ public class DataStorage
         MySqlDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            var id = reader.GetInt32("Id");
+            var id = reader.GetGuid("Id");
+            var userId = reader.GetInt32("UserConnection");
             var userLog = reader.GetString("LogText");
             var date = reader.GetDateTime("Date");
-            tasks.Add(new Objects.Task (id, userLog, date));
+            var startTime = reader.GetTimeSpan("StartTime");
+            var endTime = reader.GetTimeSpan("EndTime");
+            tasks.Add(new Objects.Task (id, userId, userLog, date, startTime, endTime ));
         }
         reader.Close();
         return tasks;
+    }
+
+    public void AddLog(Objects.Task task)
+    {
+        Console.Write(task);
+        MySqlConnection connection = ConnectToDatabase();
+        MySqlCommand cmd = new MySqlCommand("INSERT INTO userlog (`Id`, `UserConnection`, `LogText`, `Date`, `StartTime`, `EndTime`)VALUES (@Id, @UserConnection, @LogText, @Date, @StartTime, @EndTime)", connection);
+        cmd.Parameters.AddWithValue("@Id", task.Id);
+        cmd.Parameters.AddWithValue("@UserConnection", task.UserConnection);
+        cmd.Parameters.AddWithValue("@LogText", task.LogText);
+        cmd.Parameters.AddWithValue("@Date", task.Date);
+        cmd.Parameters.AddWithValue("@StartTime", task.StartTime);
+        cmd.Parameters.AddWithValue("@EndTime", task.EndTime);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
     }
 }

@@ -40,8 +40,7 @@ app.MapGet("/GetList/{id}", async (int id) =>
     return list;
 });
 
-
-app.MapGet("/GetTest", () => "Hello World!" );
+app.MapPost("/CreateLog", DataStorages.AddLog);
 
 app.Run();
 
