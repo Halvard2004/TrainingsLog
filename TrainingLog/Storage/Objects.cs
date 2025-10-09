@@ -8,4 +8,6 @@ public static class Objects
     public record Task(Guid Id, int UserConnection, string LogText, DateTime Date, TimeSpan StartTime, TimeSpan EndTime);
     
     public record GetTask(int Id);
+    
+    public record Tag(int Id, string Title, int User_Id);
 }

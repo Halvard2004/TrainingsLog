@@ -33,9 +33,10 @@ async function CreateNewLog() {
 
 function generateGUID() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0; // Random integer between 0 and 15
-    const v = c === 'x' ? r : (r & 0x3 | 0x8); // Bitwise operations for UUID version 4 compliance
+    const r = Math.random() * 16 | 0; 
+    const v = c === 'x' ? r : (r & 0x3 | 0x8); 
     return v.toString(16);
+    // i know this isnt perfect, but since it isnt a real task this is more than good enough
   });
 }
 
@@ -48,7 +49,8 @@ function generateGUID() {
         <div class="TimeInDay">
             <h2>Start</h2>      
             <h2>Stop</h2>
-            <input type="time" v-model="model.inputs.starttime"><input type="time" v-model="model.inputs.endtime">
+            <input type="time" v-model="model.inputs.starttime">
+            <input type="time" v-model="model.inputs.endtime">
         </div>
         <div class="Date">
             <input type="date" required v-model="model.inputs.date">

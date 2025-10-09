@@ -34,13 +34,17 @@ app.MapPost("/isLoginValid", WatchDB.CheckLogin);
 
 app.MapPost("/LoginUser", DataStorages.Login);
 
-app.MapGet("/GetList/{id}", async (int id) =>
+app.MapGet("/GetList/{id:int}", (int id) =>
 {
     var list = WatchDB.List(id);
-    return list;
+    return Task.FromResult(list);
 });
 
 app.MapPost("/CreateLog", DataStorages.AddLog);
+
+app.MapGet("/GetTags/{id:int}", (int id) => Task.FromResult(DataStorages.GetValidTags(id)));
+
+app.MapGet("/GetListWithTag/{id:int}", (int id) => Task.FromResult(DataStorages.GetValidLogsWithTag(id)));
 
 app.Run();
 

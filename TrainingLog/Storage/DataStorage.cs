@@ -87,4 +87,32 @@ public class DataStorage
         cmd.ExecuteNonQuery();
         EndConnection(connection);
     }
+
+    public List<Objects.Tag> GetValidTags(int UserId)
+    {
+        List<Objects.Tag> tags = new List<Objects.Tag>();
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"select * from tags where User_Id = {UserId}";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        MySqlDataReader reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            var id = reader.GetInt32("Id");
+            var title = reader.GetString("Title");
+            var userId = reader.GetInt32("User_Id");
+            tags.Add(new Objects.Tag(id, title, userId));
+        }
+        reader.Close();
+        return tags;
+    }
+
+
+    public GetValidLogsWithTag(int TagId)
+    {
+        List<Objects.Task> tasks = new List<Objects.Task>();
+        MySqlConnection connection = ConnectToDatabase();
+        // Continue with everythign below here
+        var query = $"select * from userlog where UserConnection = {TagId}";
+        GetValidLogs(connection, query);
+    }
 }
