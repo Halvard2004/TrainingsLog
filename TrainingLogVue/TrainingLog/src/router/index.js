@@ -25,7 +25,20 @@ const router = createRouter({
     {
       path: '/add',
       name: 'add',
-      component: () => import('../views/AddView.vue')
+      component: () => import('../views/AddView.vue'),
+      children:[
+        {
+          path: '/add/log',
+          name: 'addlog',
+          component: () => import('../components/AddLog.vue')
+        },
+        {
+          path: '/add/tag',
+          name: 'addtag',
+          component: () => import('../components/AddTag.vue')
+        }
+
+      ]
     },
     {
       path: '/login',

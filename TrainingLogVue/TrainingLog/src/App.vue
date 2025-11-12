@@ -17,9 +17,7 @@ import { store } from './components/Store';
     </div>
   </header>
 <div class="wrapper">
-  <Suspense>
     <RouterView />
-  </Suspense>
   </div>
 </div>
   
