@@ -6,7 +6,9 @@ import { http } from '@/api/http';
 
 const activeTag = ref();
 
-const Logs = ref([]);
+const fullLogs = ref([]);
+
+const filteredLogs = ref([])
 
 const tags = ref([]);
 
@@ -23,7 +25,7 @@ async function GetList() {
     const res = await http.get(url);
     (res.data).forEach(element => {
         var date = new Date(element.date)
-        Logs.value.push({id: element.id, text: element.logText, date: date.toLocaleDateString()})
+        fullLogs.value.push({id: element.id, text: element.logText, date: date.toLocaleDateString()})
     });
 }
 
@@ -37,24 +39,33 @@ async function GetUserTags() {
 }
 
 async function GetListWithTag(id) {
+    filteredLogs.value = [] 
+    if(activeTag.value == id) {
+        activeTag.value = null;
+        return
+    }
     activeTag.value = id;
- 
-    let url = '/GetListWithTag/' + id;
+    let url = '/GetLogListWithTag/' + id;
     const res = await http.get(url);
     (res.data).forEach(element => {
-        var date = new Date(element.date)
-        Logs.value.push({id: element.id, text: element.logText, date: date.toLocaleDateString()})
+        (fullLogs.value).forEach(log => {
+            if(log.id == element){
+            filteredLogs.value.push(log)
+            }
+        })
     });
+    console.log(filteredLogs)
 }
 </script>
 
 <template>
     <main>
         <div class="tags">
+            <h2 class="title">Tags</h2>
             <button v-for="tag in tags" :class="{ active: tag.id === activeTag}" @click="GetListWithTag(tag.id)">{{ tag.title }}</button>
         </div>
-        <div class="logs">
-            <button v-for="log in Logs">{{ log.date }}</button>
+        <div class="fulllogs">
+            <button v-for="log in filteredLogs.length > 0 ? filteredLogs : fullLogs">{{ log.date }}</button>
         </div>
     </main>
 </template>
@@ -77,22 +88,30 @@ button {
     display: flex;
     flex-direction: row;
     align-content: center;
+    justify-content: center;
     flex-wrap: wrap;
     width: 22vw;
+    background-color: grey;
 }
 
 .tags > button {
     width: 5vw;
 }
 
-.logs {
+.fulllogs {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: darkgray;
 }
 
 .active {
     background-color: green;
+}
+
+.title {
+    width: 22vw;
+    text-align: center;
 }
 
 

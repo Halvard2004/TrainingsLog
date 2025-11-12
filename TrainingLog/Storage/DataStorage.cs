@@ -107,12 +107,20 @@ public class DataStorage
     }
 
 
-    public GetValidLogsWithTag(int TagId)
+    public List<Guid> GetValidLogIdsWithTagId(int TagId)
     {
-        List<Objects.Task> tasks = new List<Objects.Task>();
+        List<Guid> tasks = new List<Guid>();
         MySqlConnection connection = ConnectToDatabase();
-        // Continue with everythign below here
-        var query = $"select * from userlog where UserConnection = {TagId}";
-        GetValidLogs(connection, query);
+        var query = $"select * from log_tags where Tag_Id = {TagId}";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        MySqlDataReader reader = cmd.ExecuteReader();
+        while (reader.Read())
+        {
+            var logId = reader.GetGuid("Log_Id");
+            tasks.Add(logId);
+        }
+        reader.Close();
+        return tasks;
     }
+    
 }

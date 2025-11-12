@@ -27,7 +27,6 @@ onMounted(() => {
   }
   today.setHours(24);
   });
-  console.log(days.value)
 })
 
 </script>
