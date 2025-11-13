@@ -88,6 +88,29 @@ public class DataStorage
         EndConnection(connection);
     }
 
+    public void AddTag(Objects.Tag tag)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        MySqlCommand cmd = new MySqlCommand("INSERT INTO tags (`Id`, `Title`, `User_Id`) VALUES (@Id, @Title, @User_Id)", connection);
+        cmd.Parameters.AddWithValue("@Id", tag.Id);
+        cmd.Parameters.AddWithValue("@Title", tag.Title);
+        cmd.Parameters.AddWithValue("@User_Id", tag.User_Id);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
+        
+    }
+
+    public void AddLogTagConnection(Objects.TagLogConnection tagLogConnection)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        MySqlCommand cmd = new MySqlCommand("INSERT INTO log_tags (`Id`, `Log_Id`, `Tag_Id`) VALUES (@Id, @Log_Id, @Tag_Id)", connection);
+        cmd.Parameters.AddWithValue("@Id", tagLogConnection.Id);
+        cmd.Parameters.AddWithValue("@Log_Id", tagLogConnection.Log_Id);
+        cmd.Parameters.AddWithValue("@Tag_Id", tagLogConnection.Tag_Id);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
+    }
+
     public List<Objects.Tag> GetValidTags(int UserId)
     {
         List<Objects.Tag> tags = new List<Objects.Tag>();
@@ -97,7 +120,7 @@ public class DataStorage
         MySqlDataReader reader = cmd.ExecuteReader();
         while (reader.Read())
         {
-            var id = reader.GetInt32("Id");
+            var id = reader.GetGuid("Id");
             var title = reader.GetString("Title");
             var userId = reader.GetInt32("User_Id");
             tags.Add(new Objects.Tag(id, title, userId));
@@ -107,13 +130,14 @@ public class DataStorage
     }
 
 
-    public List<Guid> GetValidLogIdsWithTagId(int TagId)
+    public List<Guid> GetValidLogIdsWithTagId(Guid tagId)
     {
         List<Guid> tasks = new List<Guid>();
         MySqlConnection connection = ConnectToDatabase();
-        var query = $"select * from log_tags where Tag_Id = {TagId}";
+        var query = $"select * from log_tags where Tag_Id = '{tagId}'";
         MySqlCommand cmd = new MySqlCommand(query, connection);
         MySqlDataReader reader = cmd.ExecuteReader();
+        Console.WriteLine(reader);
         while (reader.Read())
         {
             var logId = reader.GetGuid("Log_Id");

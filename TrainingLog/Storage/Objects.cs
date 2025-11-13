@@ -9,5 +9,7 @@ public static class Objects
     
     public record GetTask(int Id);
     
-    public record Tag(int Id, string Title, int User_Id);
+    public record Tag(Guid Id, string Title, int User_Id);
+    
+    public record TagLogConnection(Guid Id, Guid Log_Id, Guid Tag_Id);
 }

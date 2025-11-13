@@ -42,9 +42,13 @@ app.MapGet("/GetList/{id:int}", (int id) =>
 
 app.MapPost("/CreateLog", DataStorages.AddLog);
 
+app.MapPost("/CreateTag", DataStorages.AddTag);
+
+app.MapPost("/CreateLogTagConnection", DataStorages.AddLogTagConnection);
+
 app.MapGet("/GetTags/{id:int}", (int id) => Task.FromResult(DataStorages.GetValidTags(id)));
 
-app.MapGet("/GetLogListWithTag/{id:int}", (int id) => Task.FromResult(DataStorages.GetValidLogIdsWithTagId(id)));
+app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => Task.FromResult(DataStorages.GetValidLogIdsWithTagId(id)));
 
 app.Run();
 

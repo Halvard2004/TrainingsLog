@@ -6,27 +6,22 @@ import { http } from '@/api/http';
 var model = {
     inputs: {
         id: null,
-        userConnection: null,
-        logText: "",
-        date: null,
-        starttime: null,
-        endtime: null,
-        
+        title: "",
+        user_Id: null
     }
 }
 
 onMounted(() => {
      if(store.user.id !== null){
-        model.inputs.userConnection = store.user.id
+        model.inputs.user_Id = store.user.id
      }
         });
 
-async function CreateNewLog() {
+async function CreateNewTag() {
     model.inputs.id = generateGUID();
-    console.log(model.inputs)
-        let url = '/CreateLog';
+        let url = '/CreateTag';
         const res = await http.post(url, model.inputs);
-
+        console.log(res)
 
 }
 
@@ -42,30 +37,11 @@ function generateGUID() {
 </script>
 
 <template>
- <h1>Legg til aktivitet</h1>
-        <form @submit.prevent="CreateNewLog" class="form">
-        <div class="TimeInDay">
-            <h2>Start</h2>      
-            <h2>Stop</h2>
-            <input type="time" v-model="model.inputs.starttime">
-            <input type="time" v-model="model.inputs.endtime">
-        </div>
-        <div class="Date">
-            <input type="date" required v-model="model.inputs.date">
-        </div>
-        <div class="ActivityText">
-            <textarea id="Text" required v-model="model.inputs.logText"></textarea>
-        </div>
-        <div>
-            <label>Velg hva slags aktivitet: </label>
-            <br>
-            <select class="tags">
-                <option>Test</option>
-                <option>Test 1</option>
-                <option>Test2</option>
-                <option>Test3</option>
-                <option>Test4</option>
-            </select>
+ <h1>Legg til Tag</h1>
+        <form @submit.prevent="CreateNewTag" class="form">
+        <h2>Title</h2>
+        <div class="TagTitle">
+            <input id="Title" required v-model="model.inputs.title"></input>
         </div>
          <div class="submit"> 
             <button>Submit</button>
