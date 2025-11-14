@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <main v-on:load="">
+  <main>
    <div v-for="day in days">
       <button :class="day.status ? 'Done' : 'NotDone'">{{ day.dag }} {{ day.today ? 'Today' : '' }} {{ day.date == '' ? '' : day.date }}</button>
    </div>

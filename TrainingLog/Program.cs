@@ -50,5 +50,7 @@ app.MapGet("/GetTags/{id:int}", (int id) => Task.FromResult(DataStorages.GetVali
 
 app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => Task.FromResult(DataStorages.GetValidLogIdsWithTagId(id)));
 
+app.MapPut("/EditTag/{id}", async (Guid id, Objects.Tag tag) => DataStorages.EditLog(id, tag)); 
+
 app.Run();
 

@@ -137,7 +137,6 @@ public class DataStorage
         var query = $"select * from log_tags where Tag_Id = '{tagId}'";
         MySqlCommand cmd = new MySqlCommand(query, connection);
         MySqlDataReader reader = cmd.ExecuteReader();
-        Console.WriteLine(reader);
         while (reader.Read())
         {
             var logId = reader.GetGuid("Log_Id");
@@ -145,6 +144,19 @@ public class DataStorage
         }
         reader.Close();
         return tasks;
+    }
+
+
+    public void EditLog(Guid id, Objects.Tag tag)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"UPDATE `tags` SET `Title` = @Title WHERE (`Id` = @Id)";
+        
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id); 
+        cmd.Parameters.AddWithValue("@Title", tag.Title);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
     }
     
 }
