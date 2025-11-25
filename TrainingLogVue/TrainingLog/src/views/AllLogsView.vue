@@ -56,6 +56,7 @@ async function GetListWithTag(id) {
     });
     console.log(filteredLogs)
 }
+
 </script>
 
 <template>
@@ -65,7 +66,13 @@ async function GetListWithTag(id) {
             <button v-for="tag in tags" :class="{ active: tag.id === activeTag}" @click="GetListWithTag(tag.id)">{{ tag.title }}</button>
         </div>
         <div class="fulllogs">
-            <button v-for="log in filteredLogs.length > 0 ? filteredLogs : fullLogs">{{ log.date }}</button>
+            <div v-for="log in filteredLogs.length > 0 ? filteredLogs : fullLogs">
+                <RouterLink :to="'/log/' + log.id">
+                <button>
+                {{ log.date }}
+            </button>
+        </RouterLink>
+    </div>
         </div>
     </main>
 </template>

@@ -158,5 +158,83 @@ public class DataStorage
         cmd.ExecuteNonQuery();
         EndConnection(connection);
     }
-    
+
+    public void Deletetag(Guid id)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"DELETE FROM tags WHERE `Id` = @Id";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.ExecuteNonQuery();
+        
+        query = $"DELETE FROM log_tags WHERE `Tag_Id` = @Id";
+        MySqlCommand cmd2 = new MySqlCommand(query, connection);
+        cmd2.Parameters.AddWithValue("@Id", id);
+        cmd2.ExecuteNonQuery();
+        
+        EndConnection(connection);
+    }
+
+    public Objects.Task GetValidLog(Guid id)
+    {
+        Objects.Task task;
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"SELECT * FROM userlog WHERE `Id` = @Id";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id);
+        MySqlDataReader reader = cmd.ExecuteReader();
+        reader.Read();
+        if (reader.HasRows)
+        { 
+            task = new Objects.Task(reader.GetGuid("Id"), reader.GetInt32("UserConnection"), reader.GetString("LogText"), reader.GetDateTime("Date"), reader.GetTimeSpan("StartTime"), reader.GetTimeSpan("EndTime")); ;
+        }
+        else
+        {
+            task = null;
+        }
+        reader.Close();
+        EndConnection(connection);
+        return task;
+        
+    }
+
+    public Objects.Tag GetTagWithLogId(Guid id)
+    {
+        Guid tagId;
+        Objects.Tag tag;
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"select * from log_tags where Log_Id = @Id";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id);
+        MySqlDataReader reader = cmd.ExecuteReader();
+        reader.Read();
+        if (reader.HasRows)
+        {
+            tagId = reader.GetGuid("Tag_Id");
+        }
+        else
+        {
+            return null;
+        }
+        reader.Close();
+        
+        query = $"select * from tags where Id = @tagId";
+        cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@tagId", tagId);
+        reader = cmd.ExecuteReader();
+        reader.Read();
+        {
+            if (reader.HasRows)
+            { 
+                tag = new Objects.Tag(reader.GetGuid("Id"), reader.GetString("Title"), reader.GetInt32("User_Id"));
+            }
+            else
+            {
+                tag = null;
+            }
+        }
+        reader.Close();
+        EndConnection(connection);
+        return tag;
+    }
 }

@@ -23,6 +23,12 @@ const router = createRouter({
       component: () => import('../views/AllLogsView.vue')
     },
     {
+        path: '/log/:loggId',
+      name: 'log/:loggId',
+      component: () => import('../views/LogView.vue'),
+      },
+      
+    {
       path: '/add',
       name: 'add',
       component: () => import('../views/AddView.vue'),

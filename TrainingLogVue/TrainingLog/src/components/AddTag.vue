@@ -47,12 +47,19 @@ function generateGUID() {
 
 
 function selectTag(id) {
-    let independed = (model.tags).value.find(element => element.id === id);
-    model.inputs.value = JSON.parse(JSON.stringify(independed));
+    let selected = (model.tags).value.find(element => element.id === id);
+    model.inputs.value = JSON.parse(JSON.stringify(selected));
 }
 
-function deleteTag(id) {
-    console.log(id, "Deleted")
+async function deleteTag(id) {
+    let url = '/DeleteTag/' + id;
+    let bool = true;
+    console.log(url)
+
+    if(bool){
+    const res = await http.delete(url, model.inputs.value); 
+    }
+    
 }
 
 async function EditTag() {
@@ -75,6 +82,9 @@ async function EditTag() {
         </div>
         </form>    
     <h1>Endre/Delete Tag</h1>
-        <button v-for="tag in model.tags.value" v-on:click="selectTag(tag.id)">{{ tag.title }} <button v-on:click="deleteTag(tag.id)">X</button></button>
+        <div v-for="tag in model.tags.value">
+            <button v-on:click="selectTag(tag.id)">{{ tag.title }} </button>
+            <button v-on:click="deleteTag(tag.id)">X</button>
+        </div>
 </template>
 

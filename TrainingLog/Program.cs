@@ -1,4 +1,3 @@
-using MySqlConnector;
 using TrainingLog;
 using TrainingLog.Storage;
 
@@ -27,30 +26,36 @@ app.UseCors("frontend");
 app.UseHttpsRedirection();
 
 
-WatchDb WatchDB = new WatchDb();
-DataStorage DataStorages = new DataStorage();
+WatchDb watchDb = new WatchDb();
+DataStorage dataStorages = new DataStorage();
 
-app.MapPost("/isLoginValid", WatchDB.CheckLogin);
+app.MapPost("/isLoginValid", watchDb.CheckLogin);
 
-app.MapPost("/LoginUser", DataStorages.Login);
+app.MapPost("/LoginUser", dataStorages.Login);
 
 app.MapGet("/GetList/{id:int}", (int id) =>
 {
-    var list = WatchDB.List(id);
+    var list = watchDb.List(id);
     return Task.FromResult(list);
 });
 
-app.MapPost("/CreateLog", DataStorages.AddLog);
+app.MapPost("/CreateLog", dataStorages.AddLog);
 
-app.MapPost("/CreateTag", DataStorages.AddTag);
+app.MapPost("/CreateTag", dataStorages.AddTag);
 
-app.MapPost("/CreateLogTagConnection", DataStorages.AddLogTagConnection);
+app.MapPost("/CreateLogTagConnection", dataStorages.AddLogTagConnection);
 
-app.MapGet("/GetTags/{id:int}", (int id) => Task.FromResult(DataStorages.GetValidTags(id)));
+app.MapGet("/GetTags/{id:int}", (int id) => Task.FromResult(dataStorages.GetValidTags(id)));
 
-app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => Task.FromResult(DataStorages.GetValidLogIdsWithTagId(id)));
+app.MapGet("/GetTagFromLogId/{id:Guid}", (Guid id) => dataStorages.GetTagWithLogId(id));
 
-app.MapPut("/EditTag/{id}", async (Guid id, Objects.Tag tag) => DataStorages.EditLog(id, tag)); 
+app.MapGet("/GetLog/{id}", (Guid id) => Task.FromResult(dataStorages.GetValidLog(id)));
+
+app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => dataStorages.GetTagWithLogId(id));
+
+app.MapPut("/EditTag/{id}", (Guid id, Objects.Tag tag) => dataStorages.EditLog(id, tag));
+
+app.MapDelete("/DeleteTag/{id}", (Guid id) => dataStorages.Deletetag(id));
 
 app.Run();
 
