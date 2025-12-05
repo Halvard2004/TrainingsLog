@@ -8,7 +8,7 @@ const activeTag = ref();
 
 const fullLogs = ref([]);
 
-const filteredLogs = ref([])
+const filteredLogs = ref([]);
 
 const tags = ref([]);
 
@@ -54,7 +54,6 @@ async function GetListWithTag(id) {
             }
         })
     });
-    console.log(filteredLogs)
 }
 
 </script>

@@ -7,7 +7,7 @@ public class DataStorage
 {
     public MySqlConnection ConnectToDatabase()
     {
-        string constring = "server=localhost;user id=TestUser;password=Password12345;database=traininglog;";
+        string constring = "server=localhost;user id=TrainingLog;password=TrainingLog1;database=traininglog;";
         MySqlConnection connection = new MySqlConnection(constring);
         connection.Open();
         return connection;
@@ -217,7 +217,6 @@ public class DataStorage
             return null;
         }
         reader.Close();
-        
         query = $"select * from tags where Id = @tagId";
         cmd = new MySqlCommand(query, connection);
         cmd.Parameters.AddWithValue("@tagId", tagId);

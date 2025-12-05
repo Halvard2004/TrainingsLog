@@ -51,7 +51,7 @@ app.MapGet("/GetTagFromLogId/{id:Guid}", (Guid id) => dataStorages.GetTagWithLog
 
 app.MapGet("/GetLog/{id}", (Guid id) => Task.FromResult(dataStorages.GetValidLog(id)));
 
-app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => dataStorages.GetTagWithLogId(id));
+app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => dataStorages.GetValidLogIdsWithTagId(id));
 
 app.MapPut("/EditTag/{id}", (Guid id, Objects.Tag tag) => dataStorages.EditLog(id, tag));
 
