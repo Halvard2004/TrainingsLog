@@ -147,7 +147,7 @@ public class DataStorage
     }
 
 
-    public void EditLog(Guid id, Objects.Tag tag)
+    public void EditTag(Guid id, Objects.Tag tag)
     {
         MySqlConnection connection = ConnectToDatabase();
         var query = $"UPDATE `tags` SET `Title` = @Title WHERE (`Id` = @Id)";
@@ -235,5 +235,35 @@ public class DataStorage
         reader.Close();
         EndConnection(connection);
         return tag;
+    }
+
+    public void EditLog(Guid id, Objects.Task task)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"UPDATE `userlog` " +
+                    $"SET `LogText` = @LogText,  `Date` = @Date, `StartTime` = @StartTime, `EndTime` = @EndTime " +
+                    $"WHERE (`Id` = @Id)";
+        
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id); 
+        cmd.Parameters.AddWithValue("@LogText", task.LogText);
+        cmd.Parameters.AddWithValue("@Date", task.Date);
+        cmd.Parameters.AddWithValue("@StartTime", task.StartTime);
+        cmd.Parameters.AddWithValue("@EndTime", task.EndTime);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
+
+    }
+
+    public void EditLogTag(Guid logId, Guid tagId)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"UPDATE `log_tags` SET `Tag_Id` = @tag_Id WHERE (`Log_Id` = @log_Id)";
+        
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@log_Id", logId); 
+        cmd.Parameters.AddWithValue("@tag_Id", tagId);
+        cmd.ExecuteNonQuery();
+        EndConnection(connection);
     }
 }

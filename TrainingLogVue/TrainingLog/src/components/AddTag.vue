@@ -65,8 +65,6 @@ async function deleteTag(id) {
 async function EditTag() {
     let url = '/EditTag/' + model.inputs.value.id;
     const res = await http.put(url, model.inputs.value);
-    
-    
 }
 </script>
 

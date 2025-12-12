@@ -53,9 +53,13 @@ app.MapGet("/GetLog/{id}", (Guid id) => Task.FromResult(dataStorages.GetValidLog
 
 app.MapGet("/GetLogListWithTag/{id:Guid}", (Guid id) => dataStorages.GetValidLogIdsWithTagId(id));
 
-app.MapPut("/EditTag/{id}", (Guid id, Objects.Tag tag) => dataStorages.EditLog(id, tag));
+app.MapPut("/EditTag/{id}", (Guid id, Objects.Tag tag) => dataStorages.EditTag(id, tag));
 
 app.MapDelete("/DeleteTag/{id}", (Guid id) => dataStorages.Deletetag(id));
+
+app.MapPut("/UpdateLog/{id}", (Guid id, Objects.Task task) => dataStorages.EditLog(id, task));
+
+app.MapPut("/UpdateLogTag/{logId}", (Guid logId, Guid tagId) => dataStorages.EditLogTag(logId, tagId));
 
 app.Run();
 
