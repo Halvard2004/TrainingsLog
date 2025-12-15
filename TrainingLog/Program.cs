@@ -57,9 +57,11 @@ app.MapPut("/EditTag/{id}", (Guid id, Objects.Tag tag) => dataStorages.EditTag(i
 
 app.MapDelete("/DeleteTag/{id}", (Guid id) => dataStorages.Deletetag(id));
 
+app.MapDelete("/DeleteLog/{id}", (Guid id) => dataStorages.DeleteLog(id));
+
 app.MapPut("/UpdateLog/{id}", (Guid id, Objects.Task task) => dataStorages.EditLog(id, task));
 
-app.MapPut("/UpdateLogTag/{logId}", (Guid logId, Guid tagId) => dataStorages.EditLogTag(logId, tagId));
+app.MapPut("/UpdateLogTag/{logId}/{tagId}", (Guid logId, Guid tagId) => dataStorages.EditLogTag(logId, tagId));
 
 app.Run();
 

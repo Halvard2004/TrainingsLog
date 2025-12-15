@@ -75,7 +75,6 @@ public class DataStorage
 
     public void AddLog(Objects.Task task)
     {
-        Console.Write(task);
         MySqlConnection connection = ConnectToDatabase();
         MySqlCommand cmd = new MySqlCommand("INSERT INTO userlog (`Id`, `UserConnection`, `LogText`, `Date`, `StartTime`, `EndTime`)VALUES (@Id, @UserConnection, @LogText, @Date, @StartTime, @EndTime)", connection);
         cmd.Parameters.AddWithValue("@Id", task.Id);
@@ -264,6 +263,22 @@ public class DataStorage
         cmd.Parameters.AddWithValue("@log_Id", logId); 
         cmd.Parameters.AddWithValue("@tag_Id", tagId);
         cmd.ExecuteNonQuery();
+        EndConnection(connection);
+    }
+
+    public void DeleteLog(Guid id)
+    {
+        MySqlConnection connection = ConnectToDatabase();
+        var query = $"DELETE FROM userlog WHERE `Id` = @Id";
+        MySqlCommand cmd = new MySqlCommand(query, connection);
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.ExecuteNonQuery();
+        Console.WriteLine(cmd.CommandText);
+        var query2 = $"DELETE FROM log_tags WHERE `Log_Id` = @Id";
+        MySqlCommand cmd2 = new MySqlCommand(query2, connection); 
+        cmd2.Parameters.AddWithValue("@Id", id);
+        cmd2.ExecuteNonQuery();
+        Console.WriteLine(cmd2.CommandText);
         EndConnection(connection);
     }
 }

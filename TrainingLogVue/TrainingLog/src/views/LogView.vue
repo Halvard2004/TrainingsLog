@@ -32,7 +32,6 @@ async function GetLog() {
     const res = await http.get(url);
     model.log.value = res.data;
     model.log.value.date = new Date(model.log.value.date).toLocaleDateString();
-    console.log(model.log.value);
 }
 async function GetTag() {
     let url = '/GetTagFromLogId/' + model.route.params.loggId;
@@ -63,9 +62,10 @@ async function UpdateLog() {
         let url = '/UpdateLog/' + model.route.params.loggId;
         await http.put(url, model.inputs.log.value);
 
-        if(model.inputs.tag.value.id != model.tag.value.id) {
-            let url2 = '/UpdateLogTag/' + model.route.params.loggId;
-            await http.put(url2, model.inputs.tag.value.id);
+        if(model.inputs.tag.value != model.tag.value) {
+            let url2 = '/UpdateLogTag/' + model.route.params.loggId + '/' + model.inputs.tag.value.id;
+            console.log(url2);
+            await http.put(url2);
         }
 
         await GetLog();
@@ -78,15 +78,8 @@ async function UpdateLog() {
 async function DeleteLog() {
     let url = '/DeleteLog/' + model.route.params.loggId;
     await http.delete(url);
-    
 }
 
-function checktag(event) {
-    let selectedId = event.target.value;
-    let selected = model.tags.value.find(element => element.id === selectedId);
-    model.inputs.tag.value = JSON.parse(JSON.stringify(selected));
-    console.log(model.inputs.tag.value);
-}
 
 </script>
 
@@ -118,7 +111,8 @@ function checktag(event) {
         </div>
         <div>
             <h2><label>Velg hva slags aktivitet: </label></h2>
-            <select class="tags" :value="model.inputs.tag.value != null ? model.inputs.tag.value.id : ''">
+            <select class="tags" v-model="model.inputs.tag.value.id">
+                <option disabled :value="null">Please select one</option>
                 <option v-for="tag in model.tags.value" :value="tag.id">{{ tag.title }}</option>
             </select>
         </div>
