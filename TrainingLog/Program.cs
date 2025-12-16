@@ -33,11 +33,7 @@ app.MapPost("/isLoginValid", watchDb.CheckLogin);
 
 app.MapPost("/LoginUser", dataStorages.Login);
 
-app.MapGet("/GetList/{id:int}", (int id) =>
-{
-    var list = watchDb.List(id);
-    return Task.FromResult(list);
-});
+app.MapGet("/GetList/{id:int}", (int id) =>  Task.FromResult(watchDb.List(id)));
 
 app.MapPost("/CreateLog", dataStorages.AddLog);
 

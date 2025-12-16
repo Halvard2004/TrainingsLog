@@ -12,12 +12,15 @@ const filteredLogs = ref([]);
 
 const tags = ref([]);
 
-const showLog = ref('');
+const showLogs = ref([]);
+
+const page = ref(1);
 
 
-onMounted(() => {
+onMounted(async() => {
     GetUserTags();
-    GetList();
+    await GetList();
+    showLogsPartial();
 })
 
 async function GetList() {
@@ -42,8 +45,8 @@ async function GetListWithTag(id) {
     filteredLogs.value = [] 
     if(activeTag.value == id) {
         activeTag.value = null;
-        return
     }
+    else{
     activeTag.value = id;
     let url = '/GetLogListWithTag/' + id;
     const res = await http.get(url);
@@ -53,9 +56,23 @@ async function GetListWithTag(id) {
             filteredLogs.value.push(log)
             }
         })
-    });
+    });  
+    }
+    
+    showLogsPartial()
 }
 
+
+function showLogsPartial() {
+    const isFilltered = filteredLogs.value.length > 0 ? true : false;
+    const startIndex = (page.value - 1) * 10;
+    if(isFilltered){
+        showLogs.value = filteredLogs.value.slice(startIndex, page.value * 10);
+    } else {
+        showLogs.value = fullLogs.value.slice(startIndex, page.value * 10);
+    }
+
+}
 </script>
 
 <template>
@@ -65,14 +82,16 @@ async function GetListWithTag(id) {
             <button v-for="tag in tags" :class="{ active: tag.id === activeTag}" @click="GetListWithTag(tag.id)">{{ tag.title }}</button>
         </div>
         <div class="fulllogs">
-            <div v-for="log in filteredLogs.length > 0 ? filteredLogs : fullLogs">
+            <div v-for="log in showLogs" :key="log.id">
                 <RouterLink :to="'/log/' + log.id">
                 <button>
                 {{ log.date }}
             </button>
         </RouterLink>
-    </div>
+    </div> 
         </div>
+        <button @click="page > 1 ? page-- : page; showLogsPartial()">Previous</button>
+        <button @click="page++; showLogsPartial()">Next</button>
     </main>
 </template>
 
