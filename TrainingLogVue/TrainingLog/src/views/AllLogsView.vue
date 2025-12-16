@@ -65,13 +65,13 @@ async function GetListWithTag(id) {
 
 function showLogsPartial() {
     const isFilltered = filteredLogs.value.length > 0 ? true : false;
-    const startIndex = (page.value - 1) * 10;
+    const startIndex = (page.value - 1) * 8;
     if(isFilltered){
-        showLogs.value = filteredLogs.value.slice(startIndex, page.value * 10);
+        showLogs.value = filteredLogs.value.slice(startIndex, page.value * 8);
     } else {
-        showLogs.value = fullLogs.value.slice(startIndex, page.value * 10);
+        showLogs.value = fullLogs.value.slice(startIndex, page.value * 8);
     }
-
+    console.log(showLogs.value);
 }
 </script>
 
@@ -91,7 +91,7 @@ function showLogsPartial() {
     </div> 
         </div>
         <button @click="page > 1 ? page-- : page; showLogsPartial()">Previous</button>
-        <button @click="page++; showLogsPartial()">Next</button>
+        <button @click="page < showLogs.length / 7 ? page++ : page; showLogsPartial()">Next</button>
     </main>
 </template>
 
